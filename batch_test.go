@@ -19,13 +19,11 @@ func TestBatch(t *testing.T) {
 
 	mu := sync.Mutex{}
 	actualBatches := [][]int{}
-	it := func(index int, batch []int) bool {
+	it := func(index int, batch []int) {
 		time.Sleep(time.Millisecond * 100)
 		mu.Lock()
 		actualBatches = append(actualBatches, batch)
 		mu.Unlock()
-
-		return true
 	}
 
 	startedAt := time.Now()

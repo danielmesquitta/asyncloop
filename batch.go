@@ -8,7 +8,7 @@ import "sync"
 // This is useful if you want to perform batch operations on a large slice
 // of elements, for example, breaking up a large request into multiple
 // smaller ones.
-func Batch[T any](slice []T, size uint, it func(int, []T) bool) {
+func Batch[T any](slice []T, size uint, it func(int, []T)) {
 	if size < 1 {
 		return
 	}
