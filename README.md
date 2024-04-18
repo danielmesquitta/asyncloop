@@ -42,7 +42,7 @@ func main() {
 
 The task runs in parallel, so the total operation will only take 1 second instead of the 5 it would take otherwise.
 
-⚠️ Remember that each iteration runs in a separate goroutine, so you should ensure you are performing thread-safe operations.
+Remember that each iteration runs in a separate goroutine, so you should ensure you are performing thread-safe operations.
 
 Parallel tasks will not speed up compute-heavy operations; in such cases, you're better off using a normal loop. However, for network requests or asynchronous tasks, using `asyncloop.Loop` will improve performance.
 
@@ -106,7 +106,7 @@ func main() {
 In the above example, only 2 elements are processed at a time.
 The return value of the iterator function indicates whether to stop or continue iterating over the slice.
 
-⚠️ Be aware that goroutines already started will not be stopped; returning false will just prevent new goroutines from being spawned.
+Be aware that goroutines already started will not be stopped; returning false will just prevent new goroutines from being spawned.
 
 ### Batch
 
@@ -137,7 +137,7 @@ The above code will print something like the following output:
 1 [3 4]
 ```
 
-⚠️ The output order may vary since it runs concurrently. If a batch size of 0 is passed, then no iterations of the loop are performed.
+The output order may vary since it runs concurrently. If a batch size of 0 is passed, then no iterations of the loop are performed.
 
 ### Range
 
@@ -169,7 +169,7 @@ The above code will print out
 
 The `asyncloop.Range` method includes the starting value, but excludes the stop value.
 
-⚠️ The output sequence might differ as it is executed concurrently.
+The output sequence might differ as it is executed concurrently.
 
 ### LoopN
 
@@ -201,4 +201,4 @@ The above code will print out
 2
 ```
 
-⚠️ Keep in mind that the print order may vary due to concurrent execution.
+Keep in mind that the print order may vary due to concurrent execution.
