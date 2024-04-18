@@ -12,9 +12,9 @@ This package simplifies the process of spawning multiple goroutines, which can b
 
 ### Loop
 
-A common pattern in Go is for-looping over a slice of elements in parallel using goroutines with wait group and/or channels.
+A common pattern in Go is for-looping over a slice of elements in parallel using goroutines with wait groups and/or channels.
 
-The Loop function offers this functionality through an easy-to-use interface.
+The `asyncloop.Loop` function offers this functionality through an easy-to-use interface.
 
 ```go
 package main
@@ -78,7 +78,7 @@ func main() {
 
 The `asyncloop.Pool` function is similar to `asyncloop.Loop` but allows the caller to set the number of spawned goroutines with the second argument.
 
-This feature is useful when you want bounded concurrency to bypass rate limiters, for example.
+This feature is useful when you want bounded concurrency to avoid rate limits, for example.
 
 ```go
 package main
