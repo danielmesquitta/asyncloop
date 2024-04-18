@@ -22,10 +22,10 @@ func Batch[T any](slice []T, size uint, it func(int, []T)) {
 		top := min(uint(len(slice)), uint(i)+size)
 		batch := slice[i:top]
 
-		go func() {
+		go func(index int) {
 			defer wg.Done()
 			it(index, batch)
-		}()
+		}(index)
 
 		index++
 	}
