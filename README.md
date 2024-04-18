@@ -1,6 +1,6 @@
 # Async Loop
 
-Async Loop is a package that provides functions to range over slices concurrently
+Async Loop is a package that provides functions to iterate over slices concurrently.
 
 ## Requirements
 
@@ -8,14 +8,13 @@ This package requires Go 1.21 or higher.
 
 ## Usage
 
-This package aims to simplify spawning multiple goroutines, which can help
-fetching data from multiple APIs at once, web scraping, load testing websites and web apps by simulating high traffic, etcetera.
+This package simplifies the process of spawning multiple goroutines, which can be beneficial for fetching data from multiple APIs simultaneously, web scraping, and load testing websites and web applications by simulating high traffic, among other uses.
 
 ### Loop
 
-A commonly used pattern in Go is to iterate over a slice of elements in parallel with a wait group.
+A common pattern in Go is for-looping over a slice of elements in parallel using a wait group.
 
-The Loop function provides this functionality in an easy to use interface
+The Loop function offers this functionality through an easy-to-use interface.
 
 ```go
 package main
@@ -41,13 +40,11 @@ func main() {
 }
 ```
 
-The above task will run in parallel, which means the total operation will only take 1 second,
-instead of the 5 it would take otherwise.
+The task runs in parallel, so the total operation will only take 1 second instead of the 5 it would take otherwise.
 
-⚠️ One thing to be aware of is that each iteration runs in a separate goroutine. Therefore
-you'll want to make sure you are performing thread safe operations.
+⚠️ Remember that each iteration runs in a separate goroutine, so you should ensure you are performing thread-safe operations.
 
-The parallel task won't speed up any compute heavy operations, in that case, you're better off using a normal loop. However, in the event of performing network requests or async tasks, then using asyncloop.Loop will improve performance.
+Parallel tasks will not speed up compute-heavy operations; in such cases, you're better off using a normal loop. However, for network requests or asynchronous tasks, using `asyncloop.Loop` will improve performance.
 
 ```go
 package main
@@ -79,9 +76,9 @@ func main() {
 
 ### Pool
 
-The pool function is very similar to `asyncloop.Loop`, however it allows to caller to set the spawned goroutines amount with the second argument.
+The `asyncloop.Pool` function is similar to `asyncloop.Loop` but allows the caller to set the number of spawned goroutines with the second argument.
 
-This is useful in the event you want bounded concurrency.
+This feature is useful when you want bounded concurrency to bypass rate limiters, for example.
 
 ```go
 package main
@@ -106,15 +103,14 @@ func main() {
 }
 ```
 
-In the above example, only 2 elements will be performed at a time.
-The return of the iterator function serves to indicate if you want to stop or continue iterating over the slice
+In the above example, only 2 elements are processed at a time.
+The return value of the iterator function indicates whether to stop or continue iterating over the slice.
 
-⚠️ One thing to be aware is that goroutines already started won't be stopped,
-returning false will just stop new goroutines from being spawned
+⚠️ Be aware that goroutines already started will not be stopped; returning false will just prevent new goroutines from being spawned.
 
 ### Batch
 
-The Batch function provides the ability to range over elements in batches. The size of each batch is decided by the given size argument, in which a batch will either be the same size or less than.
+The Batch function allows you to iterate over elements in batches. The size of each batch is determined by the given size argument, where a batch can be the full size or smaller.
 
 ```go
 package main
@@ -141,13 +137,11 @@ The above code will print something like the following output:
 1 [3 4]
 ```
 
-If a batch size of 0 is passed in, then no iterations of the loop are performed.
-
-⚠️ Note that the order in which it will print may vary since it is running concurrently
+⚠️ The output order may vary since it runs concurrently. If a batch size of 0 is passed, then no iterations of the loop are performed.
 
 ### Range
 
-The range function allows you to iterate over a range of integer types.
+The Range function allows you to iterate over a range of integer values.
 
 ```go
 package main
@@ -179,7 +173,7 @@ The `asyncloop.Range` method includes the starting value, but excludes the stop 
 
 ### LoopN
 
-This method allows to perform a parallel operation for a given number of times.
+This function performs a parallel operation for a specified number of times.
 
 For example
 
