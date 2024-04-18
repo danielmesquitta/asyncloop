@@ -12,7 +12,7 @@ This package simplifies the process of spawning multiple goroutines, which can b
 
 ### Loop
 
-A common pattern in Go is for-looping over a slice of elements in parallel using a wait group.
+A common pattern in Go is for-looping over a slice of elements in parallel using goroutines with wait group and/or channels.
 
 The Loop function offers this functionality through an easy-to-use interface.
 
