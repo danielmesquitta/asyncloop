@@ -4,7 +4,7 @@ Async Loop is a package that provides functions to range over slices concurrentl
 
 ## Requirements
 
-This package requires Go 1.22.
+This package requires Go 1.21 or higher.
 
 ## Usage
 
@@ -20,20 +20,24 @@ The Loop function provides this functionality in an easy to use interface
 ```go
 package main
 
-import "github.com/danielmesquitta/asyncloop"
+import (
+	"fmt"
+	"time"
+	"github.com/danielmesquitta/asyncloop"
+)
 
 func main() {
-    slice := []int{1,2,3,4,5}
-    squares := make([]int{}, len(slice))
+	slice := []int{1, 2, 3, 4, 5}
+	squares := make([]int, len(slice))
 
-    asyncloop.Loop(slice, func(i int, val int) {
-      // Each iteration runs in a goroutine
-      squares[i] = val * val
-      // Simulate a long running task
-      time.Sleep(time.Second)
-    })
+	asyncloop.Loop(slice, func(i int, val int) {
+		// Each iteration runs in a goroutine
+		squares[i] = val * val
+		// Simulate a long running task
+		time.Sleep(time.Second)
+	})
 
-    fmt.Println(squares) // [2, 4, 9, 16, 25]
+	fmt.Println(squares) // [1 4 9 16 25]
 }
 ```
 
@@ -46,23 +50,30 @@ you'll want to make sure you are performing thread safe operations.
 The parallel task won't speed up any compute heavy operations, in that case, you're better off using a normal loop. However, in the event of performing network requests or async tasks, then using asyncloop.Loop will improve performance.
 
 ```go
-import (
-    "slog"
-    "net/http"
+package main
 
-    "github.com/danielmesquitta/asyncloop"
+import (
+	"log"
+	"net/http"
+	"strings"
+
+	"github.com/danielmesquitta/asyncloop"
 )
 
 func main() {
-  colors := []string{"green", "yellow", "blue"}
+	colors := []string{"green", "yellow", "blue"}
 
-  results := make([]*http.Response{}, len(colors))
-  asyncloop.Loop(colors, func(i int, color string) {
-    _, err := http.Post("http://example.com/colors", "text/plain", strings.NewReader(color))
-    if err != nil {
-        slog.Error("oops", slog.Any(err))
-    }
-  })
+	results := make([]*http.Response, len(colors))
+	asyncloop.Loop(colors, func(i int, color string) {
+		_, err := http.Post(
+			"http://example.com/colors",
+			"text/plain",
+			strings.NewReader(color),
+		)
+		if err != nil {
+			log.Println("oops", err)
+		}
+	})
 }
 ```
 
@@ -75,19 +86,23 @@ This is useful in the event you want bounded concurrency.
 ```go
 package main
 
-import "github.com/danielmesquitta/asyncloop"
+import (
+	"time"
+
+	"github.com/danielmesquitta/asyncloop"
+)
 
 func main() {
-  slice := []int{1,2,3,4,5}
-  size := 2
+	slice := []int{1, 2, 3, 4, 5}
+	size := 2
 
-  asyncloop.Pool(slice, size, func(i int, val int) bool {
-    // Simulate a long running task
-    time.Sleep(time.Second)
-    // Return true to continue the loop,
-    // false to stop iterating
-    return true
-  })
+	asyncloop.Pool(slice, size, func(i int, val int) bool {
+		// Simulate a long running task
+		time.Sleep(time.Second)
+		// Return true to continue the loop,
+		// false to stop iterating
+		return true
+	})
 }
 ```
 
@@ -102,14 +117,19 @@ returning false will just stop new goroutines from being spawned
 The Batch function provides the ability to range over elements in batches. The size of each batch is decided by the given size argument, in which a batch will either be the same size or less than.
 
 ```go
-import "github.com/danielmesquitta/asyncloop"
+package main
+
+import (
+	"fmt"
+
+	"github.com/danielmesquitta/asyncloop"
+)
 
 func main() {
-  slice := []int{1, 2, 3, 4, 5}
-  size := 2
-  asyncloop.Batch(slice, size, func(i int, val int) {
-    fmt.Println(i, batch)
-  })
+	slice := []int{1, 2, 3, 4, 5}
+	asyncloop.Batch(slice, 2, func(i int, batch []int) {
+		fmt.Println(i, batch)
+	})
 }
 ```
 
@@ -117,8 +137,8 @@ The above code will print something like the following output:
 
 ```
 2 [5]
-0 [1, 2]
-1 [3, 4]
+0 [1 2]
+1 [3 4]
 ```
 
 If a batch size of 0 is passed in, then no iterations of the loop are performed.
@@ -130,19 +150,24 @@ If a batch size of 0 is passed in, then no iterations of the loop are performed.
 The range function allows you to iterate over a range of integer types.
 
 ```go
-import "github.com/danielmesquitta/asyncloop"
+package main
+
+import (
+	"fmt"
+
+	"github.com/danielmesquitta/asyncloop"
+)
 
 func main() {
-  asyncloop.Range(1, 5, func(i int) {
-    fmt.Println(i)
-  })
+	asyncloop.Range(2, 5, func(i int) {
+		fmt.Println(i)
+	})
 }
 ```
 
 The above code will print out
 
 ```
-1
 2
 3
 4
@@ -159,12 +184,18 @@ This method allows to perform a parallel operation for a given number of times.
 For example
 
 ```go
-import "github.com/danielmesquitta/asyncloop"
+package main
+
+import (
+	"fmt"
+
+	"github.com/danielmesquitta/asyncloop"
+)
 
 func main() {
-  asyncloop.LoopN(3, func(i int) {
-    fmt.Println(i)
-  })
+	asyncloop.LoopN(3, func(i int) {
+		fmt.Println(i)
+	})
 }
 ```
 
