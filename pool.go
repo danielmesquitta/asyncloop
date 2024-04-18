@@ -29,7 +29,7 @@ func Pool[T any](slice []T, workers int, it func(int, T) bool) {
 	for i, v := range slice {
 		ch <- struct{}{}
 
-		go func() {
+		go func(i int, v T) {
 			defer func() {
 				<-ch
 				wg.Done()
@@ -44,7 +44,7 @@ func Pool[T any](slice []T, workers int, it func(int, T) bool) {
 					return
 				}
 			}
-		}()
+		}(i, v)
 	}
 
 	wg.Wait()

@@ -19,10 +19,10 @@ func Loop[T any](slice []T, it func(int, T)) {
 	wg := sync.WaitGroup{}
 	wg.Add(len(slice))
 	for i, v := range slice {
-		go func() {
+		go func(i int, v T) {
 			defer wg.Done()
 			it(i, v)
-		}()
+		}(i, v)
 	}
 	wg.Wait()
 }
@@ -35,10 +35,10 @@ func LoopN(n int, it func(int)) {
 	wg := sync.WaitGroup{}
 	wg.Add(n)
 	for i := 0; i < n; i++ {
-		go func() {
+		go func(i int) {
 			defer wg.Done()
 			it(i)
-		}()
+		}(i)
 	}
 	wg.Wait()
 }

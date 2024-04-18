@@ -43,10 +43,10 @@ func RangeWithStep(
 	for i := 0; i < steps; i++ {
 		wg.Add(1)
 		num := i*step + start
-		go func() {
+		go func(num int) {
 			defer wg.Done()
 			it(num)
-		}()
+		}(num)
 	}
 
 	wg.Wait()
